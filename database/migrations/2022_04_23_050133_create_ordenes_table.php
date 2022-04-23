@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductosTable extends Migration
+class CreateOrdenesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,22 @@ class CreateProductosTable extends Migration
      */
     public function up()
     {
-        Schema::create('productos', function (Blueprint $table) {
+        Schema::create('ordenes', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->string('nombre', '150');
-            $table->string('descripcion', '250');
-            $table->decimal('valor', 30, 3)->nullable();
+            $table->foreignId('codigo_producto');
+            $table->foreignId('codigo_usuario');
+            $table->string('customer_name', 80);
+            $table->string('customer_email', 80);
+            $table->string('customer_mobile', 40);
+            $table->enum('status', ['created', 'payed', 'rejected'])->default('created');
             $table->enum('estado', ['activo', 'inactivo', 'eliminado'])->default('activo');
             $table->integer('registro_usuario');
             $table->integer('registro_usuario_actualizacion')->nullable();
             $table->timestamps();
+
+            $table->foreign('codigo_producto')->references('id')->on('productos');
+            $table->foreign('codigo_usuario')->references('id')->on('users');
         });
     }
 
@@ -33,6 +39,6 @@ class CreateProductosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('productos');
+        Schema::dropIfExists('ordenes');
     }
 }

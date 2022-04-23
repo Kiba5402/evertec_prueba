@@ -7,7 +7,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Producto extends Model
+class Ordenes extends Model
 {
     use HasFactory;
     use Sluggable;
@@ -16,9 +16,12 @@ class Producto extends Model
     protected $fillable = [
         'id',
         'slug',
-        'nombre',
-        'descripcion',
-        'valor',
+        'codigo_producto',
+        'codigo_usuario',
+        'customer_name',
+        'customer_email',
+        'customer_mobile',
+        'status',
         'estado',
         'created_at',
         'updated_at',
@@ -26,9 +29,14 @@ class Producto extends Model
         'registro_usuario_actualizacion'
     ];
 
-    public function getImagenesRelation()
+    public function getProductoRelation()
     {
-        return $this->hasMany(ImagenesProducto::class, 'codigo_producto', 'id')->where('estado', 'activo');
+        return $this->belongsTo(Producto::class, 'codigo_producto');
+    }
+
+    public function getUsuarioRelation()
+    {
+        return $this->belongsTo(User::class, 'codigo_usuario');
     }
 
     public function getRegistroUsuarioRelation()
@@ -51,18 +59,15 @@ class Producto extends Model
         return $this->updated_at->format('Y-m-d H:i:s');
     }
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
-            'slug' => [
-                'source' => 'nombre',
-                'onUpdate' => true
-            ]
+            'slug' => ['source' => 'customSlug']
         ];
+    }
+
+    public function getCustomSlugAttribute()
+    {
+        return 'orden-' . substr(uniqid(), -10, -1);
     }
 }
