@@ -16,6 +16,7 @@ class CreateOrdenesTable extends Migration
         Schema::create('ordenes', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
+            $table->string('referencia')->unique();
             $table->foreignId('codigo_producto');
             $table->foreignId('codigo_usuario');
             $table->string('customer_name', 80);

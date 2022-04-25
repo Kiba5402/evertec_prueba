@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,5 +20,41 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+Route::get('/home2', function () {
+    $datetime = new DateTime(now());
+    $fecha = $datetime->format(DateTime::ATOM);
+    $nonce = uniqid();
+    //$fecha = str_replace('+', '-', $fecha);
+    $nonceBase = base64_encode($nonce);
+    $login = '6dd490faf9cb87a9862245da41170ff2';
+    $secret = '024h1IlD';
+    $tranKey = base64_encode(sha1(($nonce . $fecha . $secret), true));
+
+    $peticion = Http::post('https://dev.placetopay.com/redirection/api/session', [
+        "locale" => "es_CO",
+        "auth"   => [
+            "login"   => "$login",
+            "tranKey" => "$tranKey",
+            "nonce"   => "$nonceBase",
+            "seed"    => "$fecha"
+        ],
+        "payment" => [
+            "reference"   => "1122334455",
+            "description" => "Prueba",
+            "amount"      => [
+                "currency" => "USD",
+                "total"    => 100
+            ],
+            "allowPartial" => false
+        ],
+        "expiration" => "2022-12-30T00:00:00-05:00",
+        "returnUrl"  => "https://dnetix.co/p2p/client",
+        "ipAddress"  => "127.0.0.1",
+        "userAgent"  => "PlacetoPay Sandbox"
+    ])->throw()->json();
+
+    dd($peticion);
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

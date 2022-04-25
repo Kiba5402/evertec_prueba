@@ -16,6 +16,7 @@ class Ordenes extends Model
     protected $fillable = [
         'id',
         'slug',
+        'referencia',
         'codigo_producto',
         'codigo_usuario',
         'customer_name',
