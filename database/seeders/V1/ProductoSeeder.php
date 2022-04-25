@@ -24,7 +24,7 @@ class ProductoSeeder extends Seeder
             'estado'                         => 'activo',
             'registro_usuario'               => self::ID_ADMIN,
             'registro_usuario_actualizacion' => self::ID_ADMIN
-        ]), ['img_1', 'img_2']);
+        ]), ['images/productos/1/mistery-1.jpg', 'images/productos/1/mistery-2.jpg']);
     }
 
     private function creaImagen(Producto $producto = null, array $imagenes)

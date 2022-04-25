@@ -1,13 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller;
+use App\Repositories\V1\ProductosRepository;
 
-class Controller extends BaseController
+class ProductoController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    private $productoRepositories;
+
+    public function __construct(ProductosRepository $_productoRepositories)
+    {
+        $this->productoRepositories = $_productoRepositories;
+    }
+
+    public function index()
+    {
+        $productos = $this->productoRepositories->all();
+        return view('productos', ['productos' => $productos]);
+    }
 }
