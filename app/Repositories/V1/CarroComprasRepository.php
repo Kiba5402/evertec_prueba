@@ -22,6 +22,17 @@ class CarroComprasRepository extends BaseRepository
             ->where('estado', 'activo')->first();
     }
 
+    public function calcularTotalCarroCompras(CarroCompras $carroCompras)
+    {
+        $total = 0;
+
+        foreach ($carroCompras->getPivotProductosRelation as $pivote) {
+            $total += $pivote->getProductoRelation->valor * $pivote->cantidad_producto;
+        }
+
+        return $total;
+    }
+
     public function adicionProducto(CarroCompras $carroCompras, Producto $producto, $cantidad = 1)
     {
         //Adición del producto al carro de compras, si ya existe actualiza la cantidad

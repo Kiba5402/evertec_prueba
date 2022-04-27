@@ -2,6 +2,8 @@
 
 namespace App\Models\V1;
 
+use App\Models\User;
+use App\Models\OrdenVsProductos;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -17,7 +19,6 @@ class Ordenes extends Model
         'id',
         'slug',
         'referencia',
-        'codigo_producto',
         'codigo_usuario',
         'customer_name',
         'customer_email',
@@ -30,9 +31,10 @@ class Ordenes extends Model
         'registro_usuario_actualizacion'
     ];
 
-    public function getProductoRelation()
+    public function getPivotProductosRelation()
     {
-        return $this->belongsTo(Producto::class, 'codigo_producto');
+        return $this->hasMany(OrdenVsProductos::class, 'codigo_orden', 'id')
+            ->where('orden_vs_productos.estado', "activo");
     }
 
     public function getUsuarioRelation()
@@ -58,6 +60,18 @@ class Ordenes extends Model
     public function getGetUpdatedAtAttribute()
     {
         return $this->updated_at->format('Y-m-d H:i:s');
+    }
+
+    public function getStatusCastAttribute()
+    {
+        switch ($this->status) {
+            case 'created':
+                return 'pendiente';
+            case 'payed':
+                return 'pago exitoso';
+            case 'created':
+                return 'rechazado';
+        }
     }
 
     public function sluggable(): array

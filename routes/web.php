@@ -27,7 +27,10 @@ Route::middleware(['auth'])->group(function () {
     });
 
     //Ordenes
-    Route::get('/ordenes', [App\Http\Controllers\V1\OrdenesController::class, 'index'])->name('ordenes');
+    Route::name('order.')->prefix('/order')->group(function () {
+        Route::get('/init-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'store'])->name('init-order');
+        Route::get('/get-orders', [App\Http\Controllers\V1\OrdenesController::class, 'index'])->name('get-orders');
+    });
 });
 
 Route::get('/home2', function () {

@@ -17,7 +17,6 @@ class CreateOrdenesTable extends Migration
             $table->id();
             $table->string('slug')->unique();
             $table->string('referencia')->unique();
-            $table->foreignId('codigo_producto');
             $table->foreignId('codigo_usuario');
             $table->string('customer_name', 80);
             $table->string('customer_email', 80);
@@ -28,7 +27,6 @@ class CreateOrdenesTable extends Migration
             $table->integer('registro_usuario_actualizacion')->nullable();
             $table->timestamps();
 
-            $table->foreign('codigo_producto')->references('id')->on('productos');
             $table->foreign('codigo_usuario')->references('id')->on('users');
         });
     }

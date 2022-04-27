@@ -18,10 +18,16 @@
                         </thead>
                         <tbody>
                             <?php $total = 0 ?>
+                            @if (isset($carroCompras))
                             @foreach ($carroCompras->getPivotProductosRelation as $productoPivot)
                             <x-producto-lista :cantidad="$productoPivot->cantidad_producto" :producto="$productoPivot->getProductoRelation" />
                             <?php $total += ($productoPivot->cantidad_producto * $productoPivot->getProductoRelation->valor) ?>
                             @endforeach
+                            @else
+                            <tr>
+                                <td style="text-align: center;" colspan="4">Carrito de compras vacío</td>
+                            </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -30,7 +36,9 @@
                     <span style="text-align:center">${{number_format($total,2,",",".")}}</span>
                     <br>
                     <br>
-                    <button type="button" class="btn btn-dark">Continuar con la compra</button>
+                    <a type="button" href="{{route('order.init-order', [isset($carroCompras)?$carroCompras->slug:''])}}" class="btn btn-dark {{!isset($carroCompras)?'disabled':''}}">
+                        <span style="color:white">Continuar con la compra</span>
+                    </a>
                 </div>
             </div>
         </div>

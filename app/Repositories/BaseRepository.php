@@ -33,6 +33,12 @@ class BaseRepository
         return $this->model->find($id);
     }
 
+    //Retorna un registro especifico del modelo
+    public function getBySlug(String $slug)
+    {
+        return $this->model->findBySlug($slug);
+    }
+
     //Guarda un registro especifico del modelo
     public function save(Model $model)
     {
