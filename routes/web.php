@@ -30,9 +30,14 @@ Route::middleware(['auth'])->group(function () {
 
     //Ordenes
     Route::name('order.')->prefix('/order')->group(function () {
+        Route::post('/create-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder'])->name('create-order');
         Route::get('/init-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'store'])->name('init-order');
         Route::get('/get-orders', [App\Http\Controllers\V1\OrdenesController::class, 'index'])->name('get-orders');
     });
 });
 
 Route::get('/home2', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder']);
+
+Route::get('/home-3', function () {
+    echo 'regresando de la transaccion';
+});

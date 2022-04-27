@@ -3,7 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\User;
-use App\Models\OrdenVsProductos;
+use App\Models\V1\OrdenVsProductos;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -19,6 +19,7 @@ class Ordenes extends Model
         'id',
         'slug',
         'referencia',
+        'request_id',
         'codigo_usuario',
         'customer_name',
         'customer_email',

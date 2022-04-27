@@ -3,6 +3,7 @@
 namespace App\Repositories\V1;
 
 use App\Models\V1\Ordenes;
+use App\Models\V1\CarroCompras;
 use App\Repositories\BaseRepository;
 
 class OrdenCompraRepository extends BaseRepository
@@ -25,7 +26,14 @@ class OrdenCompraRepository extends BaseRepository
             ->where('status', 'created')->get();
     }
 
-    public function cargaProductosCarroCompras()
+    public function cargaProductosCarroCompras(CarroCompras $carroCompras, Ordenes $ordenCompra)
     {
+        foreach ($carroCompras->getPivotProductosRelation as $pivote) {
+            $ordenCompra->getPivotProductosRelation()->create([
+                'codigo_producto'   => $pivote->getProductoRelation->id,
+                'cantidad_producto' => $pivote->cantidad_producto,
+                'estado'            => 'activo'
+            ]);
+        }
     }
 }

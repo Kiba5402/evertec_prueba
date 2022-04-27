@@ -2,6 +2,7 @@
 
 namespace App\Repositories\V1;
 
+use App\Models\V1\Ordenes;
 use App\Models\V1\Producto;
 use App\Models\V1\CarroCompras;
 use App\Repositories\BaseRepository;
@@ -25,11 +26,9 @@ class CarroComprasRepository extends BaseRepository
     public function calcularTotalCarroCompras(CarroCompras $carroCompras)
     {
         $total = 0;
-
         foreach ($carroCompras->getPivotProductosRelation as $pivote) {
             $total += $pivote->getProductoRelation->valor * $pivote->cantidad_producto;
         }
-
         return $total;
     }
 

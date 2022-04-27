@@ -12,23 +12,19 @@ class PlaceToPayGateWay implements paymentGateWay
 {
     public function createRequest(PaymentInfo $payment, string $return_url, int $expiration_minutes, string $locale)
     {
-        try {
-            $now = new DateTime(now());
-            $expiration = (new Carbon($now))->addMinutes(($expiration_minutes < 10) ? 10 : $expiration_minutes);
-            $expiration = $expiration->format(DateTime::ATOM);
+        $now = new DateTime(now());
+        $expiration = (new Carbon($now))->addMinutes(($expiration_minutes < 10) ? 10 : $expiration_minutes);
+        $expiration = $expiration->format(DateTime::ATOM);
 
-            return Http::post(env('URL_BASE_PLACETOPAY'), [
-                "locale"     => $locale,
-                "auth"       => $this->authPlaceToPay($now),
-                "payment"    => $this->paymentPlaceToPay($payment),
-                "expiration" => $expiration,
-                "returnUrl"  => $return_url,
-                "ipAddress"  => Request()->ip(),
-                "userAgent"  => "PlacetoPay Sandbox"
-            ])->throw()->json();
-        } catch (\Throwable $th) {
-            throw new \Exception($th->getMessage);
-        }
+        return Http::post(env('URL_BASE_PLACETOPAY'), [
+            "locale"     => $locale,
+            "auth"       => $this->authPlaceToPay($now),
+            "payment"    => $this->paymentPlaceToPay($payment),
+            "expiration" => $expiration,
+            "returnUrl"  => $return_url,
+            "ipAddress"  => Request()->ip(),
+            "userAgent"  => "PlacetoPay Sandbox"
+        ])->throw()->json();
     }
 
     public function getRequestInformation(String $id_session)

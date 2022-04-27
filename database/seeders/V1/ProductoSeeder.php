@@ -19,8 +19,8 @@ class ProductoSeeder extends Seeder
         //Creación del producto e imágenes asociadas
         $this->creaImagen(Producto::create([
             'nombre'                         => 'Caja misteriosa',
-            'descripcion'                    => 'Caja que contiene objetos aleatorios valorados en 1000 pesos',
-            'valor'                          => 1000,
+            'descripcion'                    => 'Caja que contiene objetos aleatorios valorados en $100.000 pesos',
+            'valor'                          => 100000,
             'estado'                         => 'activo',
             'registro_usuario'               => self::ID_ADMIN,
             'registro_usuario_actualizacion' => self::ID_ADMIN
