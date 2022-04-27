@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Models\V1\PaymentInfo;
+use App\Payments\V1\PlaceToPayGateWay;
 use App\Repositories\V1\OrdenCompraRepository;
 use App\Repositories\V1\CarroComprasRepository;
 use Illuminate\Routing\Controller as BaseController;
@@ -50,5 +52,11 @@ class OrdenesController extends BaseController
             $total = $this->carroComprasRepositories->calcularTotalCarroCompras($carrito);
             return view('crear-orden', ["total_compra" => $total]);
         }
+    }
+
+    public function createOrder()
+    {
+        $payment = new PlaceToPayGateWay();
+        $payment->createRequest((new PaymentInfo(uniqid(), 'compra_prueba', 'COP', 10000)), 'http://127.0.0.1:8000/order/get-orders', '10', 'es_CO');
     }
 }

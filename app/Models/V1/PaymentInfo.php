@@ -2,7 +2,7 @@
 
 namespace App\Models\V1;
 
-class Payment
+class PaymentInfo
 {
 
     public String $referencia;
