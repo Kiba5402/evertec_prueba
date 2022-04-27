@@ -14,9 +14,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [App\Http\Controllers\V1\ProductoController::class, 'index']);
+
+Route::get('/', [App\Http\Controllers\V1\ProductoController::class, 'index'])->name('home');
 
 Auth::routes();
+
+Route::middleware(['auth'])->group(function () {
+    //Carrito compras
+    Route::name('shopping-cart.')->prefix('/shopping-cart')->group(function () {
+        Route::get('/get-User-Sc', [App\Http\Controllers\V1\CarritoComprasController::class, 'carroComprasUsuario'])->name('get-User-Sc');
+        Route::get('/add-product/{slug_producto}/{cantidad}', [App\Http\Controllers\V1\CarritoComprasController::class, 'adicionProducto'])->name('add-product');
+    });
+
+    //Ordenes
+    Route::get('/ordenes', [App\Http\Controllers\V1\OrdenesController::class, 'index'])->name('ordenes');
+});
 
 Route::get('/home2', function () {
     $datetime = new DateTime(now());
@@ -53,5 +65,3 @@ Route::get('/home2', function () {
 
     dd($peticion);
 });
-
-

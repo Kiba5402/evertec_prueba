@@ -1,14 +1,12 @@
 @extends('layouts.layout')
 <!-- Posts -->
-@section('title', 'Productos')
+@section('title', 'Ordenes')
 @section('contenido')
 <section>
     <div class="row justify-content-center">
         <div class="col-10">
             <div class="row">
-                @foreach ($productos as $producto)
-                <x-producto :producto="$producto"/>
-                @endforeach
+                Ordenes
             </div>
         </div>
     </div>

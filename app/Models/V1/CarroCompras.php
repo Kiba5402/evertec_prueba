@@ -24,11 +24,9 @@ class CarroCompras extends Model
         'registro_usuario_actualizacion'
     ];
 
-    public function getProductosRelation()
+    public function getPivotProductosRelation()
     {
-        return $this->hasManyThrough(Producto::class, CarroComprasVsProductos::class, 'codigo_carro_compras', 'codigo_producto', 'id')
-            ->withPivot('cantidad_producto')
-            ->where('productos.estado', "activo")
+        return $this->hasMany(CarroComprasVsProductos::class, 'codigo_carro_compras', 'id')
             ->where('carro_compras_vs_productos.estado', "activo");
     }
 

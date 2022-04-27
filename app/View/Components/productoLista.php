@@ -2,21 +2,23 @@
 
 namespace App\View\Components;
 
-use App\Models\V1\Producto as modelo_producto;
 use Illuminate\View\Component;
+use App\Models\V1\Producto as modelo_producto;
 
-class Producto extends Component
+class productoLista extends Component
 {
     public modelo_producto $producto;
+    public int $cantidad;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(modelo_producto $producto)
+    public function __construct(int $cantidad, modelo_producto $producto)
     {
         $this->producto = $producto;
+        $this->cantidad = $cantidad;
     }
 
     /**
@@ -26,6 +28,6 @@ class Producto extends Component
      */
     public function render()
     {
-        return view('components.producto');
+        return view('components.producto-lista');
     }
 }
