@@ -70,8 +70,9 @@ class PlaceToPayGateWay implements paymentGateWay
     {
         switch ($state) {
             case 'CREATED':
+            case 'PENDING':
                 return 'created';
-            case 'PAYED':
+            case 'APPROVED':
                 return 'payed';
             case 'REJECTED':
                 return 'rejected';

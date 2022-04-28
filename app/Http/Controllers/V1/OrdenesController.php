@@ -121,11 +121,15 @@ class OrdenesController extends BaseController
                 if (isset($sesion_pago['status'])) {
                     $castState = $this->paymentGateWay->castStateResponde($sesion_pago['status']['status']);
                     $orden->fill([
-                        'request_url'      => ($castState == 'created') ? $sesion_pago['processUrl'] : '',   //si la orden esta rechazada o ya pagada eliminamos la url de acceso a la sesion (esta sesion ya no tiene uso)
-                        'status'           => $castState,
-                        'registro_usuario' => auth()->user()->id
+                        'request_url' => ($castState == 'created') ? $orden->request_url : '',   //si la orden esta rechazada o ya pagada eliminamos la url de acceso a la sesion (esta sesion ya no tiene uso)
+                        'status'      => $castState
                     ]);
                     $this->ordenRepositories->save($orden);
+                    //si la orden fue aprobada eliminamos el carrito de compras activo del usuario 
+                    $carrito = $this->carroComprasRepositories->carroComprasUsuarioActual();
+                    if($carrito) $this->carroComprasRepositories->save($carrito->fill(['estado' => 'eliminado'])); 
+                    //el job que actualiza estados de las ordenes usa esta funcion por lo
+                    //tanto no es necesaria un a redireccion 
                     if ($redireccion) {
                         $ordenes = $this->ordenRepositories->getOrdenesUsuario();
                         return view('ordenes', ['ordenes' => $ordenes]);

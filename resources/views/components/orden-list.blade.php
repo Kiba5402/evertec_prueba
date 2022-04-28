@@ -21,6 +21,21 @@
         <span style="font-size:1.1em">{{$orden->status_cast}}</span>
     </td>
     <td style="vertical-align:middle;text-align:center;">
-        <span style="font-size:1.1em">acciones</span>
+        @if ($orden->status == 'created')
+        <h5>
+            <a href="{{$orden->request_url}}" class="badge bg-success">
+                Continuar con el pago
+            </a>
+        </h5>
+        @elseif ($orden->status == 'rejected')
+        <h5>
+            <a href="/order/pay-order/{{$orden->slug}}" class="badge bg-warning text-dark">
+                Reintentar el pago
+            </a>
+        </h5>
+        @else
+        -
+        @endif
+        <span style="font-size:1.1em"></span>
     </td>
 </tr>
