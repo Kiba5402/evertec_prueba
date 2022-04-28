@@ -29,6 +29,11 @@ class PlaceToPayGateWay implements paymentGateWay
 
     public function getRequestInformation(String $id_session)
     {
+        $now = new DateTime(now());
+
+        return Http::post(env('URL_BASE_PLACETOPAY') . '/' . $id_session, [
+            "auth" => $this->authPlaceToPay($now),
+        ])->throw()->json();
     }
 
 
@@ -59,5 +64,19 @@ class PlaceToPayGateWay implements paymentGateWay
             "nonce"   => base64_encode($nonce),
             "seed"    => $fecha
         ];
+    }
+
+    public function castStateResponde(String $state = 'CREATED')
+    {
+        switch ($state) {
+            case 'CREATED':
+                return 'created';
+            case 'PAYED':
+                return 'payed';
+            case 'REJECTED':
+                return 'rejected';
+            default:
+                return 'created';
+        }
     }
 }

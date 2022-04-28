@@ -15,6 +15,11 @@ class OrdenCompraRepository extends BaseRepository
         parent::__construct($ordenes, self::RELATIONS);
     }
 
+    public function getOrdenReferencia($referencia)
+    {
+        return Ordenes::where('referencia', $referencia)->get();
+    }
+
     public function getOrdenesUsuario()
     {
         return Ordenes::where('codigo_usuario', auth()->user()->id)->get();
@@ -35,5 +40,14 @@ class OrdenCompraRepository extends BaseRepository
                 'estado'            => 'activo'
             ]);
         }
+    }
+
+    public function calcularTotalCarroCompras(Ordenes $orden)
+    {
+        $total = 0;
+        foreach ($orden->getPivotProductosRelation as $pivote) {
+            $total += $pivote->getProductoRelation->valor * $pivote->cantidad_producto;
+        }
+        return $total;
     }
 }

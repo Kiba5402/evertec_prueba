@@ -33,11 +33,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder'])->name('create-order');
         Route::get('/init-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'store'])->name('init-order');
         Route::get('/get-orders', [App\Http\Controllers\V1\OrdenesController::class, 'index'])->name('get-orders');
+        Route::get('/pay-order/{slug_orden}', [App\Http\Controllers\V1\OrdenesController::class, 'orderPay'])->name('pay-order');
+        Route::get('/return-paygateway/{slug_orden}', [App\Http\Controllers\V1\OrdenesController::class, 'returnPayGateWay'])->name('return-paygateway');
     });
 });
 
 Route::get('/home2', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder']);
 
-Route::get('/home-3', function () {
-    echo 'regresando de la transaccion';
-});

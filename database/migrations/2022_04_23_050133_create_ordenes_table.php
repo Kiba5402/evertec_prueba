@@ -17,7 +17,8 @@ class CreateOrdenesTable extends Migration
             $table->id();
             $table->string('slug')->unique();
             $table->string('referencia')->unique();
-            $table->string('request_id')->unique();
+            $table->string('request_id')->unique()->nullable();
+            $table->string('request_url')->unique()->nullable();
             $table->foreignId('codigo_usuario');
             $table->string('customer_name', 80);
             $table->string('customer_email', 80);

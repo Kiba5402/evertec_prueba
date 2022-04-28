@@ -3,6 +3,9 @@
         <span style="font-size:1.1em">{{$orden->id}}</span>
     </td>
     <td style="vertical-align:middle;text-align:center;">
+        <span style="font-size:1.1em">{{$orden->getCreatedAt}}</span>
+    </td>
+    <td style="vertical-align:middle;text-align:center;">
         <span style="font-size:1.1em">{{$orden->referencia}}</span>
     </td>
     <td style="vertical-align:middle;text-align:center;">

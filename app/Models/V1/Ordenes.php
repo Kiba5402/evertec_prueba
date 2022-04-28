@@ -20,6 +20,7 @@ class Ordenes extends Model
         'slug',
         'referencia',
         'request_id',
+        'request_url',
         'codigo_usuario',
         'customer_name',
         'customer_email',
@@ -70,7 +71,7 @@ class Ordenes extends Model
                 return 'pendiente';
             case 'payed':
                 return 'pago exitoso';
-            case 'created':
+            case 'rejected':
                 return 'rechazado';
         }
     }

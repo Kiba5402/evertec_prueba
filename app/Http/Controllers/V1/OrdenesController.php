@@ -64,17 +64,15 @@ class OrdenesController extends BaseController
 
     public function createOrder(creaOrdenRequest $request, $slug_carrito)
     {
-        try {
+        //consulto si hay un orden pendiente
+        if (count($this->ordenRepositories->getOrdenPendiente()) > 0 || true) {
             $referencia = uniqid();
             $carrito = $this->carroComprasRepositories->getBySlug($slug_carrito);
-            $totalCompra = $this->carroComprasRepositories->calcularTotalCarroCompras($carrito);
-            //creacion de sesion con la pasarela de pagos
-            $sesion_pago = $this->paymentGateWay->createRequest((new PaymentInfo($referencia, 'compra_prueba', 'COP', $totalCompra)), 'http://127.0.0.1:8000/home-3', self::LIMITE_PAGO, 'es_CO');
-            //sesion de pago creada correctamente
-            if ($sesion_pago['status']['status'] == 'OK') {
+            $ordenCompra = null;
+            $totalCompra = 0;
+            if ($carrito) {
                 $ordenCompra = $this->ordenRepositories->save(new Ordenes([
                     'referencia'       => $referencia,
-                    'request_id'       => $sesion_pago['requestId'],
                     'codigo_usuario'   => auth()->user()->id,
                     'customer_name'    => $request->nombre,
                     'customer_email'   => $request->correo,
@@ -84,11 +82,58 @@ class OrdenesController extends BaseController
                 ]));
                 //creacion de la orden a partir del carro de compras (pasar por caja)
                 $this->ordenRepositories->cargaProductosCarroCompras($carrito, $ordenCompra);
-                //se redirige a la pasarela de pagos
+                $totalCompra = $this->ordenRepositories->calcularTotalCarroCompras($ordenCompra);
+            }
+            //se redirige al resumen de la orden
+            return view('resumen-orden', ["orden" => $ordenCompra, "total_compra" => $totalCompra]);
+        }
+    }
+
+    public function orderPay($slug_orden)
+    {
+        try {
+            $ordenCompra = $this->ordenRepositories->getBySlug($slug_orden);
+            $totalCompra = $this->ordenRepositories->calcularTotalCarroCompras($ordenCompra);
+            //creacion de sesion con la pasarela de pagos
+            $sesion_pago = $this->paymentGateWay->createRequest((new PaymentInfo($ordenCompra->referencia, 'compra_prueba', 'COP', $totalCompra)), env('APP_URL') . '/order/return-paygateway/' . $ordenCompra->slug, self::LIMITE_PAGO, 'es_CO');
+            if ($sesion_pago['status']['status'] == 'OK') {
+                $ordenCompra->fill([
+                    'request_url'      => $sesion_pago['processUrl'],
+                    'request_id'       => $sesion_pago['requestId'],
+                    'registro_usuario' => auth()->user()->id
+                ]);
+                $this->ordenRepositories->save($ordenCompra);
+                //redirige a la pasarela de pago
                 return Redirect::to($sesion_pago['processUrl']);
             }
         } catch (\Throwable $th) {
             echo 'Error al crear la orden de compra, motivo: ' . $th->getMessage();
+        }
+    }
+
+    public function returnPayGateWay($slug_orden, $redireccion = true)
+    {
+        try {
+            $orden = $this->ordenRepositories->getBySlug($slug_orden);
+            if ($orden) {
+                //consultamos el estado del pago
+                $sesion_pago = $this->paymentGateWay->getRequestInformation($orden->request_id);
+                if (isset($sesion_pago['status'])) {
+                    $castState = $this->paymentGateWay->castStateResponde($sesion_pago['status']['status']);
+                    $orden->fill([
+                        'request_url'      => ($castState == 'created') ? $sesion_pago['processUrl'] : '',   //si la orden esta rechazada o ya pagada eliminamos la url de acceso a la sesion (esta sesion ya no tiene uso)
+                        'status'           => $castState,
+                        'registro_usuario' => auth()->user()->id
+                    ]);
+                    $this->ordenRepositories->save($orden);
+                    if ($redireccion) {
+                        $ordenes = $this->ordenRepositories->getOrdenesUsuario();
+                        return view('ordenes', ['ordenes' => $ordenes]);
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            echo 'Error al consultar la orden de compra sobre la pasarela de pagos, motivo: ' . $th->getMessage();
         }
     }
 }

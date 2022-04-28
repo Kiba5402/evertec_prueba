@@ -11,6 +11,7 @@
                         <thead>
                             <tr>
                                 <th style="text-align:center">#</th>
+                                <th style="text-align:center">Fecha creación</th>
                                 <th style="text-align:center">Referencia</th>
                                 <th style="text-align:center">Nombre comprador</th>
                                 <th style="text-align:center">Correo comprador</th>

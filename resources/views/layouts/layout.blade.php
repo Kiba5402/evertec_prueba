@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div style="height: 34.5rem">
+        <div style="min-height: 34.5rem">
             <!-- contenido -->
             @yield('contenido')
         </div>

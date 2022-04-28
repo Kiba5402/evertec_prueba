@@ -35,7 +35,7 @@
             <span style="text-align:center">${{number_format($total_compra,2,",",".")}}</span>
             <br>
             <br>
-            <button type="submit" class="btn btn-dark">Continuar con el pago</button>
+            <button type="submit" class="btn btn-dark">Confirmar orden</button>
         </div>
     </form>
 </section>
