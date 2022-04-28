@@ -7,6 +7,7 @@ use App\Repositories\V1\ProductosRepository;
 
 class ProductoController extends Controller
 {
+     //Repositorios
     private $productoRepositories;
 
     public function __construct(ProductosRepository $_productoRepositories)
@@ -14,6 +15,7 @@ class ProductoController extends Controller
         $this->productoRepositories = $_productoRepositories;
     }
 
+    //Funcion que retorna todos los productos registrados en el sistema
     public function index()
     {
         $productos = $this->productoRepositories->all();

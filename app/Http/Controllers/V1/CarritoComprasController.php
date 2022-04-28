@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\V1;
 
-use Illuminate\Http\Request;
 use App\Models\V1\CarroCompras;
 use App\Repositories\V1\ProductosRepository;
 use App\Repositories\V1\CarroComprasRepository;
@@ -10,6 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 class CarritoComprasController extends BaseController
 {
+    //Repositorios
     private $carroComprasRepositories;
     private $productoRepositories;
 
@@ -20,11 +20,7 @@ class CarritoComprasController extends BaseController
         $this->productoRepositories = $_productoRepositories;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    //Esta funcion retorna el carro de compras activo para el usuario logueado
     public function carroComprasUsuario()
     {
         //consultamos el carro de compras activo para el usuario autenticado
@@ -36,11 +32,9 @@ class CarritoComprasController extends BaseController
         ]);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+
+    //Esta funcion recibe el identificador slug del producto y la cantidad para ser agregado 
+    //al carrito de compras
     public function adicionProducto($slug_producto, $cantidad)
     {
         //consultamos el carro de compras activo para el usuario autenticado

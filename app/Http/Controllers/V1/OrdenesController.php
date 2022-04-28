@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\V1\Ordenes;
-use Illuminate\Http\Request;
 use App\Models\V1\PaymentInfo;
 use App\Interfaces\paymentGateWay;
 use App\Payments\V1\PlaceToPayGateWay;
@@ -16,8 +15,12 @@ use Illuminate\Routing\Controller as BaseController;
 class OrdenesController extends BaseController
 {
     const LIMITE_PAGO = 10; //expiración de la sesión pago en minutos
+    
+    //Repositorios
     private $ordenRepositories;
     private $carroComprasRepositories;
+
+    //Objeto pasarela de pago
     private paymentGateWay $paymentGateWay;
 
     public function __construct(OrdenCompraRepository $ordenRepository, CarroComprasRepository $carroComprasRepository)
@@ -27,33 +30,21 @@ class OrdenesController extends BaseController
         $this->paymentGateWay = new PlaceToPayGateWay();
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    //Retorna todas las ordenes de compra que registran en el sistema
     public function all()
     {
         $ordenes = $this->ordenRepositories->all();
         return view('ordenes-tienda', ['ordenes' => $ordenes, 'admin' => true]);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    //Retorna las ordenes del usuario logueado en el sistema
     public function index()
     {
         $ordenes = $this->ordenRepositories->getOrdenesUsuario();
         return view('ordenes', ['ordenes' => $ordenes]);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    //Esta funcion evalua la existencia en ordenes pendientes antes de crear alguna
     public function store($slug_carrito)
     {
         //consulto si hay un orden pendiente
@@ -73,6 +64,8 @@ class OrdenesController extends BaseController
         }
     }
 
+    //Funcion que recibe la informacion del comprador y el carrito de compras origen
+    //y a partir de estos datos crea una orden
     public function createOrder(creaOrdenRequest $request, $slug_carrito)
     {
         //consulto si hay un orden pendiente
@@ -100,6 +93,7 @@ class OrdenesController extends BaseController
         }
     }
 
+    //funcion que consulta y muestra un resumen de orden
     public function orderSummary($slug_orden)
     {
         $ordenCompra = $this->ordenRepositories->getBySlug($slug_orden);
@@ -109,6 +103,7 @@ class OrdenesController extends BaseController
         }
     }
 
+    //funcion que recibe una orden y redirige al usuario hacia la pasarela de pago
     public function orderPay($slug_orden)
     {
         try {
@@ -131,6 +126,8 @@ class OrdenesController extends BaseController
         }
     }
 
+    //funcion llamada desde la pasarela de pago, la pasarela nos envia el slug de la orden
+    //de acuerdo a esto consultamos la sesion de pago y actualizamos el estado de la orden
     public function returnPayGateWay($slug_orden, $redireccion = true)
     {
         try {
