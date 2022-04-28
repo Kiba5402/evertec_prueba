@@ -20,12 +20,11 @@ Instalar dependencias de PHP.
 composer install
 ```
 
-Se debe contar con una base de datos en MySQL llamada "laravel" para ejecutar el siguiente comando
+Generar llave unica de la aplicación.
 
 ```sh
-php artisan migrate:fresh --seed
+php artisan key:generate
 ```
-
 
 El aplicativo requiere de [Node.js](https://nodejs.org/) para la instalación de dependencias.
 
@@ -34,15 +33,22 @@ Instalar dependencias de node js.
 ```sh
 npm i
 ```
-
 ## Variables de entorno
 
-Se deben asignar las siguientes variables de entorno para ejecutar de forma exitosa
+1. Crear un archivo .env a partir del archivo .env.example
+2. Se deben asignar las siguientes variables de entorno para ejecutar de forma exitosa
 ```sh
 APP_URL=                Ruta donde se está ejecutando la aplicación por lo general http://127.0.0.1:8000
 URL_BASE_PLACETOPAY=    Url base del servicio placetopay 
 LOGIN_PLACETOPAY=       Variable de logueo para hacer uso del servicio placetopay
 SECRET_PLACETOPAY=      Variable secret para hacer uso del servicio placetopay
+```
+## Bases de datos
+
+Se debe contar con una base de datos en MySQL llamada "laravel" para ejecutar el siguiente comando
+
+```sh
+php artisan migrate:fresh --seed
 ```
 
 ## Ejecución

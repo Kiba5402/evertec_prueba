@@ -16,7 +16,7 @@ class PlaceToPayGateWay implements paymentGateWay
         $expiration = (new Carbon($now))->addMinutes(($expiration_minutes < 10) ? 10 : $expiration_minutes);
         $expiration = $expiration->format(DateTime::ATOM);
 
-        return Http::post(env('URL_BASE_PLACETOPAY'), [
+        return Http::post(env('URL_BASE_PLACETOPAY').'api/session', [
             "locale"     => $locale,
             "auth"       => $this->authPlaceToPay($now),
             "payment"    => $this->paymentPlaceToPay($payment),
@@ -31,7 +31,7 @@ class PlaceToPayGateWay implements paymentGateWay
     {
         $now = new DateTime(now());
 
-        return Http::post(env('URL_BASE_PLACETOPAY') . '/' . $id_session, [
+        return Http::post(env('URL_BASE_PLACETOPAY') . 'api/session/' . $id_session, [
             "auth" => $this->authPlaceToPay($now),
         ])->throw()->json();
     }
