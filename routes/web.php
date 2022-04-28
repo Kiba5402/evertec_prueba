@@ -1,10 +1,6 @@
 <?php
 
-use App\Models\V1\Payment;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
-use App\Http\Payments\V1\Payments\PlaceToPayGateWay;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +35,3 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/return-paygateway/{slug_orden}', [App\Http\Controllers\V1\OrdenesController::class, 'returnPayGateWay'])->name('return-paygateway');
     });
 });
-
-Route::get('/home2', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder']);
