@@ -48,4 +48,8 @@
         </div>
     </div>
 </section>
+<script>
+    let links = new Links();
+    links.selectCategory('ordenes-tienda-category');
+</script>
 @endsection

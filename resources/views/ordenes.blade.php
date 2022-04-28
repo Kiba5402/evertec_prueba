@@ -42,8 +42,14 @@
 <x-modal-alert :id="'orden-pendiente-modal'" :titulo="'Orden pendiente'" :mensaje="'Usted ya cuenta con una orden de compra pendiente, por favor finalice el pago a través del botón \'retomar\' o espere algunos minutos'" />
 @if (isset($flag_pendiente))
 <script>
+    //validar alerta orden pendiente
     let orden = new Orden();
     orden.mostrarModalOrdenPendiente('orden-pendiente-modal');
 </script>
 @endif
+<script>
+    //seleccionar link del modulo
+    let links = new Links();
+    links.selectCategory('ordenes-category');
+</script>
 @endsection

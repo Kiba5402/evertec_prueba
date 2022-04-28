@@ -44,4 +44,8 @@
         </div>
     </div>
 </section>
+<script>
+    let links = new Links();
+    links.selectCategory('carrito-category');
+</script>
 @endsection

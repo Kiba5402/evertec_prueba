@@ -13,4 +13,8 @@
         </div>
     </div>
 </section>
+<script>
+    let links = new Links();
+    links.selectCategory('productos-category');
+</script>
 @endsection
