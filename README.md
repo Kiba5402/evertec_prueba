@@ -79,7 +79,7 @@ php artisan test
 
 ## Manual de usuario
 A continuación, encontrara un manual de usuario sencillo que describe el funcionamiento básico del aplicativo
-- [Manual de usuario](https://laravel.com/)
+- [Manual de usuario](https://drive.google.com/file/d/1Eq8tdsVJWocVJJjnJTESmDmGMkpWjLCb/view)
 
 ## Usuario pruebas
 para realizar pruebas sobre el aplicativo se puede iniciar sesión con el siguiente usuario
