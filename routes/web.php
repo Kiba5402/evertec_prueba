@@ -33,10 +33,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/create-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder'])->name('create-order');
         Route::get('/init-order/{slug_carrito}', [App\Http\Controllers\V1\OrdenesController::class, 'store'])->name('init-order');
         Route::get('/get-orders', [App\Http\Controllers\V1\OrdenesController::class, 'index'])->name('get-orders');
+        Route::get('/get-all-orders', [App\Http\Controllers\V1\OrdenesController::class, 'all'])->name('get-all-orders');
         Route::get('/pay-order/{slug_orden}', [App\Http\Controllers\V1\OrdenesController::class, 'orderPay'])->name('pay-order');
+        Route::get('/order-summary/{slug_orden}', [App\Http\Controllers\V1\OrdenesController::class, 'orderSummary'])->name('order-summary');
         Route::get('/return-paygateway/{slug_orden}', [App\Http\Controllers\V1\OrdenesController::class, 'returnPayGateWay'])->name('return-paygateway');
     });
 });
 
 Route::get('/home2', [App\Http\Controllers\V1\OrdenesController::class, 'createOrder']);
-

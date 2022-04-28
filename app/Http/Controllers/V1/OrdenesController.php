@@ -32,6 +32,17 @@ class OrdenesController extends BaseController
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function all()
+    {
+        $ordenes = $this->ordenRepositories->all();
+        return view('ordenes-tienda', ['ordenes' => $ordenes, 'admin' => true]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
     public function index()
     {
         $ordenes = $this->ordenRepositories->getOrdenesUsuario();
@@ -65,7 +76,7 @@ class OrdenesController extends BaseController
     public function createOrder(creaOrdenRequest $request, $slug_carrito)
     {
         //consulto si hay un orden pendiente
-        if (count($this->ordenRepositories->getOrdenPendiente()) > 0 || true) {
+        if (count($this->ordenRepositories->getOrdenPendiente()) == 0) {
             $referencia = uniqid();
             $carrito = $this->carroComprasRepositories->getBySlug($slug_carrito);
             $ordenCompra = null;
@@ -86,6 +97,15 @@ class OrdenesController extends BaseController
             }
             //se redirige al resumen de la orden
             return view('resumen-orden', ["orden" => $ordenCompra, "total_compra" => $totalCompra]);
+        }
+    }
+
+    public function orderSummary($slug_orden)
+    {
+        $ordenCompra = $this->ordenRepositories->getBySlug($slug_orden);
+        if ($ordenCompra) {
+            //se redirige al resumen de la orden
+            return view('resumen-orden', ["orden" => $ordenCompra, "total_compra" => $ordenCompra->total, "resumen" => true]);
         }
     }
 
@@ -121,13 +141,13 @@ class OrdenesController extends BaseController
                 if (isset($sesion_pago['status'])) {
                     $castState = $this->paymentGateWay->castStateResponde($sesion_pago['status']['status']);
                     $orden->fill([
-                        'request_url' => ($castState == 'created') ? $orden->request_url : '',   //si la orden esta rechazada o ya pagada eliminamos la url de acceso a la sesion (esta sesion ya no tiene uso)
+                        'request_url' => ($castState == 'created') ? $orden->request_url : null,   //si la orden esta rechazada o ya pagada eliminamos la url de acceso a la sesion (esta sesion ya no tiene uso)
                         'status'      => $castState
                     ]);
                     $this->ordenRepositories->save($orden);
                     //si la orden fue aprobada eliminamos el carrito de compras activo del usuario 
                     $carrito = $this->carroComprasRepositories->carroComprasUsuarioActual();
-                    if($carrito) $this->carroComprasRepositories->save($carrito->fill(['estado' => 'eliminado'])); 
+                    if ($carrito) $this->carroComprasRepositories->save($carrito->fill(['estado' => 'eliminado']));
                     //el job que actualiza estados de las ordenes usa esta funcion por lo
                     //tanto no es necesaria un a redireccion 
                     if ($redireccion) {

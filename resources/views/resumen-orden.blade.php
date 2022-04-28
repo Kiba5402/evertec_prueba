@@ -49,11 +49,19 @@
             <span style="text-align:center">${{number_format($total_compra,2,",",".")}}</span>
             <br>
             <br>
+            @if (isset($resumen))
+            <a href="{{ redirect()->back()->getTargetUrl() }}" class="btn btn-dark">
+                <span style="color:white">
+                    Volver
+                </span>
+            </a>
+            @else
             <a href="/order/pay-order/{{$orden->slug}}" class="btn btn-dark">
                 <span style="color:white">
                     Continuar con el pago
                 </span>
             </a>
+            @endif
         </div>
     </div>
     <br>

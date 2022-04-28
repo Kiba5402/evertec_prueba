@@ -64,6 +64,15 @@ class Ordenes extends Model
         return $this->updated_at->format('Y-m-d H:i:s');
     }
 
+    public function getTotalAttribute()
+    {
+        $total = 0;
+        foreach ($this->getPivotProductosRelation as $pivote) {
+            $total += $pivote->getProductoRelation->valor * $pivote->cantidad_producto;
+        }
+        return $total;
+    }
+
     public function getStatusCastAttribute()
     {
         switch ($this->status) {

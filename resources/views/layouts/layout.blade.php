@@ -32,8 +32,11 @@
             <div class="col-10 col-md-12">
                 <nav class="text-center my-5">
                     <a href="{{route('home')}}" class="mx-3 pb-3 link-category d-block d-md-inline selected-category">Productos</a>
-                    <a href="{{route('order.get-orders')}}" class="mx-3 pb-3 link-category d-block d-md-inline">Ordenes</a>
                     <a href="{{route('shopping-cart.get-User-Sc')}}" class="mx-3 pb-3 link-category d-block d-md-inline">Carrito Compras</a>
+                    <a href="{{route('order.get-orders')}}" class="mx-3 pb-3 link-category d-block d-md-inline">Ordenes Usuario</a>
+                    @if (auth()->user()->profile == 1)
+                    <a href="{{route('order.get-all-orders')}}" class="mx-3 pb-3 link-category d-block d-md-inline">Ordenes Tienda</a>
+                    @endif
                 </nav>
             </div>
         </div>
