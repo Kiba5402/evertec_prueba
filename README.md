@@ -53,7 +53,7 @@ php artisan migrate:fresh --seed
 
 ## Ejecución
 
-Para la ejecución del aplicativo se requiere el siguiente comando
+Para la ejecución del aplicativo se requiere estar sobre la rama master y el siguiente comando
 
 ```sh
 php artisan serve
@@ -80,6 +80,12 @@ php artisan test
 ## Manual de usuario
 A continuación, encontrara un manual de usuario sencillo que describe el funcionamiento básico del aplicativo
 - [Manual de usuario](https://laravel.com/)
+
+## Usuario pruebas
+para realizar pruebas sobre el aplicativo se puede iniciar sesión con el siguiente usuario
+
+* Email Address: admin@evertec.com
+* Password: evertec2022*
 
 ## Licencia
 MIT
